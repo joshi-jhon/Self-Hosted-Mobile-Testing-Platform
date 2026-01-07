@@ -1,124 +1,134 @@
-🚀 One-Click Installation (Production-Grade)
+# 📱 Self-Hosted Mobile Testing Platform
+### 100% Free • Firebase / BrowserStack Alternative • Enterprise-Grade
 
-This project includes a single, production-ready, idempotent Bash installer that installs, configures, secures, and runs the entire Mobile Testing Platform on Ubuntu Server 22.04.
+---
 
-✨ Installer Guarantees
+## 📌 Overview
+
+This repository provides a **fully self-hosted Android Mobile Testing Platform** built entirely using **open-source tools**.
+
+It is designed for teams that **do not want paid cloud services** like Firebase Test Lab, BrowserStack, or Sauce Labs, and want **full control** over devices, data, and CI pipelines.
+
+---
+
+## 🏗️ Architecture
+
+┌────────────────────────────┐
+│ Nginx Proxy Manager │
+│ (SSL / Auth / RBAC) │
+└───────────┬────────────────┘
+│ HTTPS
+▼
+┌──────────────────────────────────────────┐
+│ Ubuntu Server 22.04 │
+│ │
+│ DeviceFarmer ←→ Appium 2 Grid │
+│ ▲ ▲ │
+│ │ ADB │ WebDriver │
+│ Emulator Pool ←→ Auto-Scaler │
+│ │
+│ tc/netem (Network Throttling) │
+│ │
+│ Prometheus ←→ Grafana │
+└──────────────────────────────────────────┘
+
+
+---
+
+## 🚀 One-Click Installation (Production-Grade)
+
+This project includes a **single, production-ready, idempotent Bash installer** that installs, configures, secures, and runs **the entire Mobile Testing Platform** on **Ubuntu Server 22.04**.
+
+### ✨ Installer Guarantees
 
 The installation script is:
 
-✅ 100% self-hosted (no paid services, no cloud lock-in)
+- ✅ 100% self-hosted
+- ✅ Reboot-safe
+- ✅ Error-handled
+- ✅ Non-interactive
+- ✅ Idempotent (safe to re-run)
+- ✅ Enterprise-ready
 
-✅ Reboot-safe (systemd managed)
+> Run **ONE SCRIPT** and you get a **Firebase / BrowserStack-class internal Device Farm**.
 
-✅ Error-handled (fails fast with clear logs)
+---
 
-✅ Non-interactive (CI & automation friendly)
+## 📦 What the Installer Does (Automatically)
 
-✅ Idempotent (safe to re-run multiple times)
+### 🔧 System & Runtime
+- ✔ OS validation (Ubuntu Server 22.04)
+- ✔ Java (OpenJDK 17)
+- ✔ Node.js & npm
+- ✔ Core system utilities
 
-✅ Enterprise-ready
+### 📱 Android Stack
+- ✔ Android SDK & Platform Tools
+- ✔ Android Emulator
+- ✔ Pre-configured AVDs
+- ✔ Non-root emulator execution
 
-Run ONE SCRIPT and you get a Firebase / BrowserStack-class internal Device Farm.
+### 🧪 Automation
+- ✔ Appium 2 (global install)
+- ✔ UiAutomator2 & Espresso drivers
+- ✔ Appium bound to `127.0.0.1`
 
-📦 What the Installer Does (Automatically)
+### 🧩 Device Management
+- ✔ DeviceFarmer (ADB broker + UI)
+- ✔ Automatic ADB discovery by Appium
 
-The script performs full system provisioning end-to-end:
+### 🔄 Auto-Scaling
+- ✔ Emulator auto-scaler
+- ✔ systemd service + timer
+- ✔ CPU / RAM aware scaling
+- ✔ Idle emulator cleanup
 
-🔧 System & Runtime
+### 📊 Observability
+- ✔ Prometheus
+- ✔ Grafana
+- ✔ Metrics endpoints enabled
 
-✔ OS validation (Ubuntu Server 22.04)
+### 🎥 Test Artifacts
+- ✔ scrcpy screen capture
+- ✔ ffmpeg video recording
+- ✔ Per-test recording support
 
-✔ Java (OpenJDK 17)
+### 🌐 Network Simulation
+- ✔ `tc` + `netem`
+- ✔ 2G / 3G / 4G / 5G profiles
 
-✔ Node.js & npm
+### 🔐 Security Hardening
+- ✔ UFW firewall rules
+- ✔ Appium localhost-only binding
+- ✔ Non-root Android user
+- ✔ Reboot-safe systemd services
 
-✔ System dependencies & tooling
+---
 
-📱 Android Stack
+## ⚡ One-Click Install
 
-✔ Android SDK & Platform Tools
+### 📄 Script
 
-✔ Android Emulator
-
-✔ Pre-configured AVDs
-
-✔ Non-root emulator execution
-
-🧪 Automation
-
-✔ Appium 2 (global install)
-
-✔ UiAutomator2 & Espresso drivers
-
-✔ Appium bound to 127.0.0.1 (secure by default)
-
-🧩 Device Management
-
-✔ DeviceFarmer (ADB broker + UI)
-
-✔ Automatic ADB discovery by Appium
-
-🔄 Auto-Scaling
-
-✔ Emulator auto-scaler
-
-✔ systemd service + timer
-
-✔ CPU / RAM aware spin-up
-
-✔ Idle emulator cleanup
-
-📊 Observability
-
-✔ Prometheus
-
-✔ Grafana
-
-✔ Metrics endpoints enabled
-
-🎥 Test Artifacts
-
-✔ scrcpy screen capture
-
-✔ ffmpeg video recording
-
-✔ Per-test video support
-
-🌐 Network Simulation
-
-✔ tc + netem
-
-✔ 2G / 3G / 4G / 5G profiles
-
-🔐 Security
-
-✔ UFW firewall hardening
-
-✔ Appium localhost-only binding
-
-✔ No USB passthrough
-
-✔ Reboot-safe services enabled
-
-⚡ One-Click Install
-📄 Script Location
 install-device-farm.sh
 
-▶️ Run Installation
+
+### ▶️ Run
+
+```bash
 sudo bash install-device-farm.sh
 
+⏱️ Install time: ~10–15 minutes
 
-⏱️ Typical install time: 10–15 minutes
-📜 Full logs: /var/log/devicefarm-install.log
+📜 Logs: /var/log/devicefarm-install.log
+
+
 
 🧪 Verify Installation (2 Minutes)
-
-After installation completes, run the following checks:
 
 # Verify Appium drivers
 appium driver list
 
-# Verify emulator / device visibility
+# Verify emulator availability
 adb devices
 
 # Check Appium service
@@ -128,30 +138,136 @@ systemctl status appium
 systemctl status emulator-scaler.timer
 
 
-Expected results:
+Expected:
 
 Appium drivers listed (uiautomator2, espresso)
 
-At least one emulator visible via ADB
+Emulator visible in adb devices
 
-All services in active (running) state
+Services running and enabled
 
-✅ Result
+🔌 Appium ↔ DeviceFarmer Wiring
 
-After successful installation, you have:
+DeviceFarmer acts as a pure ADB broker.
+Appium automatically picks up devices exposed via ADB.
 
-✅ An internal Firebase Test Lab alternative
+Example Capabilities
 
-✅ Unlimited Android test execution
+{
+  "platformName": "Android",
+  "automationName": "UiAutomator2",
+  "udid": "DEVICE_UDID",
+  "app": "/apps/app.apk"
+}
 
-✅ CI/CD-ready Appium Grid
 
-✅ Emulator auto-scaling
+🔄 Emulator Auto-Scaling
 
-✅ Network condition testing
+Emulators start only when tests run
 
-✅ Video recordings per test
+Idle emulators are cleaned automatically
 
-✅ Metrics & dashboards
+Managed by systemd timers
 
-✅ Fully self-hosted & secure
+Manual Commands
+adb devices
+journalctl -u emulator-scaler.service
+
+
+🌐 Network Throttling
+Apply Profiles
+netem-profile.sh 2G
+netem-profile.sh 3G
+netem-profile.sh 4G
+netem-profile.sh 5G
+
+Reset
+tc qdisc del dev eth0 root
+
+🎥 Video Recording
+Manual
+scrcpy --record /recordings/test_$(date +%s).mp4
+
+Appium API
+driver.startRecordingScreen();
+driver.stopRecordingScreen();
+
+📊 Metrics & Dashboards
+
+Emulator CPU / RAM
+
+App launch time
+
+Test duration
+
+Failures per build
+
+Device utilization
+
+Access:
+
+Grafana → http://<server-ip>:3000
+
+Prometheus → http://<server-ip>:9090
+
+🔐 Security Model
+
+Appium bound to localhost
+
+Firewall restricted ports
+
+No USB passthrough
+
+CI secrets isolated
+
+Optional AppArmor / SELinux
+
+🛠️ Troubleshooting
+Appium
+systemctl status appium
+journalctl -u appium -f
+
+Emulator / ADB
+adb kill-server
+adb start-server
+adb devices
+
+Network
+tc qdisc show dev eth0
+
+Logs
+tail -f /var/log/devicefarm-install.log
+journalctl -xe
+
+🔁 Reboot Safety
+
+All components run as systemd services and automatically recover after reboot.
+
+📜 License
+
+This project is licensed under the Apache License 2.0.
+
+You are free to use, modify, and distribute this software for internal or commercial use,
+in compliance with the license terms.
+
+See the LICENSE file for details.
+
+🎯 Final Result
+
+✅ Internal Firebase Test Lab
+✅ Unlimited test runs
+✅ Zero cloud cost
+✅ Full CI/CD integration
+✅ Enterprise-grade reliability
+
+
+---
+
+If you want next, I can:
+- Add `CONTRIBUTING.md`
+- Add `SECURITY.md`
+- Add a **Quick Start (First Test in 5 minutes)**
+- Add **Real Device over LAN** guide
+- Add **Grafana JSON dashboards**
+
+Just say the word 🚀
